@@ -12,6 +12,7 @@ depends: [
   "ocaml"
   "dune" {>= "3.15"}
   "dream"
+  "tyxml"
   "odoc" {with-doc}
 ]
 build: [

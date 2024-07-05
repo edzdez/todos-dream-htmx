@@ -1,4 +1,4 @@
 (executable
  (public_name todos_dream_htmx)
  (name main)
- (libraries todos_dream_htmx dream))
+ (libraries todos_dream_htmx dream tyxml))

@@ -17,7 +17,7 @@
  (name todos_dream_htmx)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune dream)
+ (depends ocaml dune dream tyxml)
  (tags
   (topics "to describe" your project)))
 
