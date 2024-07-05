@@ -57,6 +57,11 @@ module TodoItem = struct
       store := todo :: List.filter (fun todo -> todo.id <> id) !store;
       todo)
   ;;
+
+  let remove id =
+    Mutex.protect store_lock (fun _ ->
+      store := List.filter (fun todo -> todo.id <> id) !store)
+  ;;
 end
 
 let get_all_todos _request =
@@ -118,6 +123,18 @@ let update_todo request =
         | _ -> Dream.empty `Bad_Request))
 ;;
 
+let delete_todo request =
+  let id = Dream.param request "id" in
+  match int_of_string_opt id with
+  | None -> Dream.empty `Bad_Request
+  | Some id ->
+    (match TodoItem.get id with
+     | None -> Dream.empty `Not_Found
+     | Some _ ->
+       TodoItem.remove id;
+       Dream.empty `No_Content)
+;;
+
 let root _request =
   Dream.html
   @@ string_of_elt
@@ -138,6 +155,7 @@ let () =
            ; Dream.get "/todos/:id" get_todo
            ; Dream.post "/todos" create_todo
            ; Dream.patch "/todos/:id" update_todo
+           ; Dream.delete "/todos/:id" delete_todo
            ]
        ]
 ;;
