@@ -17,7 +17,7 @@
  (name todos_dream_htmx)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune dream tyxml)
+ (depends ocaml dune dream tyxml lwtppx yojson ppx_deriving_yojson)
  (tags
   (topics "to describe" your project)))
 

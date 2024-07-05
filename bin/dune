@@ -1,4 +1,5 @@
 (executable
  (public_name todos_dream_htmx)
  (name main)
- (libraries todos_dream_htmx dream tyxml))
+ (libraries todos_dream_htmx dream tyxml yojson ppx_deriving_yojson.runtime)
+ (preprocess (pps lwt_ppx ppx_deriving_yojson)))
