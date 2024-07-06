@@ -1,6 +1,6 @@
 let string_of_elt elt = Format.asprintf "%a" (Tyxml.Html.pp_elt ()) elt
 
-module TodoItem = struct
+module Todo_item = struct
   type t =
     { id : int
     ; title : string
@@ -85,8 +85,8 @@ module TodoItem = struct
 end
 
 let get_all_todos request =
-  let%lwt todos = Dream.sql request TodoItem.Persistence.get_all in
-  Dream.json @@ Yojson.Safe.to_string @@ TodoItem.ts_to_yojson todos
+  let%lwt todos = Dream.sql request Todo_item.Persistence.get_all in
+  Dream.json @@ Yojson.Safe.to_string @@ Todo_item.ts_to_yojson todos
 ;;
 
 let get_todo request =
@@ -94,28 +94,28 @@ let get_todo request =
   match int_of_string_opt id with
   | None -> Dream.empty `Bad_Request
   | Some id ->
-    let%lwt maybe_todo = Dream.sql request (TodoItem.Persistence.get id) in
+    let%lwt maybe_todo = Dream.sql request (Todo_item.Persistence.get id) in
     (match maybe_todo with
      | None -> Dream.empty `Not_Found
-     | Some todo -> Dream.json @@ Yojson.Safe.to_string @@ TodoItem.to_yojson todo)
+     | Some todo -> Dream.json @@ Yojson.Safe.to_string @@ Todo_item.to_yojson todo)
 ;;
 
 let create_todo request =
   match Dream.header request "Content-Type" with
   | Some "application/json" ->
     let%lwt body = Dream.body request in
-    (match TodoItem.create_request_of_yojson @@ Yojson.Safe.from_string body with
+    (match Todo_item.create_request_of_yojson @@ Yojson.Safe.from_string body with
      | Error e ->
        Dream.error (fun log ->
          log ~request "Failed to parse TodoItem.create_request with error: %s" e);
        Dream.empty `Bad_Request
      | Ok create_request ->
-       let%lwt todo = Dream.sql request (TodoItem.Persistence.create create_request) in
+       let%lwt todo = Dream.sql request (Todo_item.Persistence.create create_request) in
        Dream.json
          ~status:`Created
          ~headers:[ "Location", Printf.sprintf "/api/todos/%d" todo.id ]
        @@ Yojson.Safe.to_string
-       @@ TodoItem.to_yojson todo)
+       @@ Todo_item.to_yojson todo)
   | _ -> Dream.empty `Bad_Request
 ;;
 
@@ -124,26 +124,26 @@ let update_todo request =
   match int_of_string_opt id with
   | None -> Dream.empty `Bad_Request
   | Some id ->
-    let%lwt todo = Dream.sql request (TodoItem.Persistence.get id) in
+    let%lwt todo = Dream.sql request (Todo_item.Persistence.get id) in
     (match todo with
      | None -> Dream.empty `Not_Found
      | Some todo ->
        (match Dream.header request "Content-Type" with
         | Some "application/json" ->
           let%lwt body = Dream.body request in
-          (match TodoItem.update_request_of_yojson @@ Yojson.Safe.from_string body with
+          (match Todo_item.update_request_of_yojson @@ Yojson.Safe.from_string body with
            | Error e ->
              Dream.error (fun log ->
                log ~request "Failed to parse TodoItem.update_request with error: %s" e);
              Dream.empty `Bad_Request
            | Ok update_request ->
-             let todo = TodoItem.update todo update_request in
-             let%lwt () = Dream.sql request (TodoItem.Persistence.update todo) in
+             let todo = Todo_item.update todo update_request in
+             let%lwt () = Dream.sql request (Todo_item.Persistence.update todo) in
              Dream.json
                ~status:`OK
                ~headers:[ "Content-Location", Printf.sprintf "/api/todos/%d" id ]
              @@ Yojson.Safe.to_string
-             @@ TodoItem.to_yojson todo)
+             @@ Todo_item.to_yojson todo)
         | _ -> Dream.empty `Bad_Request))
 ;;
 
@@ -152,11 +152,11 @@ let delete_todo request =
   match int_of_string_opt id with
   | None -> Dream.empty `Bad_Request
   | Some id ->
-    let%lwt todo = Dream.sql request (TodoItem.Persistence.get id) in
+    let%lwt todo = Dream.sql request (Todo_item.Persistence.get id) in
     (match todo with
      | None -> Dream.empty `Not_Found
      | Some _ ->
-       let%lwt () = Dream.sql request (TodoItem.Persistence.remove id) in
+       let%lwt () = Dream.sql request (Todo_item.Persistence.remove id) in
        Dream.empty `No_Content)
 ;;
 
