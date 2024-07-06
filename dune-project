@@ -17,7 +17,7 @@
  (name todos_dream_htmx)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune dream tyxml lwtppx yojson ppx_deriving_yojson)
+ (depends ocaml dune dream tyxml lwtppx yojson ppx_deriving_yojson caqti caqti-driver-sqlite3)
  (tags
   (topics "to describe" your project)))
 

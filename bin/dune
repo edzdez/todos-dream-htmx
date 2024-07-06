@@ -1,5 +1,5 @@
 (executable
  (public_name todos_dream_htmx)
  (name main)
- (libraries todos_dream_htmx dream tyxml yojson ppx_deriving_yojson.runtime)
+ (libraries todos_dream_htmx dream tyxml yojson ppx_deriving_yojson.runtime caqti caqti-driver-sqlite3)
  (preprocess (pps lwt_ppx ppx_deriving_yojson)))

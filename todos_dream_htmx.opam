@@ -13,6 +13,11 @@ depends: [
   "dune" {>= "3.15"}
   "dream"
   "tyxml"
+  "lwtppx"
+  "yojson"
+  "ppx_deriving_yojson"
+  "caqti"
+  "caqti-driver-sqlite3"
   "odoc" {with-doc}
 ]
 build: [

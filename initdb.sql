@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS todos;
+CREATE TABLE todos(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    description TEXT
+);
